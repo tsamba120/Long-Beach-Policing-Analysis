@@ -18,7 +18,7 @@ url_dict = {
     'contrabandEvidenceDiscovered': 'https://opendata.arcgis.com/datasets/425d4f0f345e4aa0bebf8de941846c1e_0.geojson'
 }
 
-def callAPI(url_dict):
+def callAPI(url_dict) -> None:
     '''
     Loop through REST API urls (in url_dict) and load to tables/save to csv's for staging
     '''
