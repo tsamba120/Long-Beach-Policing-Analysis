@@ -75,16 +75,34 @@ def clean_table_2():
     disability_df.drop('Disability_None', axis=1, inplace=True)
     disability_df.rename(columns=lambda x: re.sub('Disability_', 'DA_', x), inplace=True)
     disability_df.to_csv(out_file_path + 'PROCESSED_2_disability.csv')
-    print('Table 2 loaded\n')
+    print('Table 2 processed\n')
 
 
 def clean_table_3():
     '''
     Cleans reason for stop data
     '''
+    rfs_df = load_process_tables('3. reasonForStop.csv')
+    print('Table 3 loaded\n')
+    rfs_df = pd.get_dummies(rfs_df.drop(['ObjectId','reasonForStopcode', 'reasonForStopCodeText'], axis=1)).groupby(['StopID','PID']).sum()
+    rfs_df.rename(columns=lambda x: re.sub('reasonForStop_', 'RFS_', x), inplace=True)
+    rfs_df.rename(columns=lambda x: re.sub('reasonForStopDetail_', 'RFS_Detail_', x), inplace=True)
+    rfs_df.to_csv(out_file_path + 'PROCESSED_3_reasonForStop.csv')
+    print('Table 3 processed\n')
+
+
+def clean_table_4():
+    '''
+    Cleans actions during stop
+    '''
 
 if __name__ == '__main__':
-    pass
+    clean_table_0()
+    clean_table_1()
+    clean_table_2()
+    clean_table_3()
+    print('='*30)
+    print('All tables processed')
 
 ### CREATES MAIN DF BELOW ###
 
