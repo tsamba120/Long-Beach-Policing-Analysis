@@ -29,7 +29,10 @@ def load_process_tables(file_name, file_path='./raw_data/'):
     ''' Reads tables and performs initial column sweep 
         Also removes 'properties.' quality from column
     '''
-    df = pd.read_csv(file_path + file_name, dtype=object)
+    if '0. ' in file_name:
+        df = pd.read_csv(file_path + file_name, dtype=object)
+    else:
+        df = pd.read_csv(file_path + file_name)
     df.rename(columns=lambda x: re.sub('properties.', '', x), inplace=True)
     return df
 
@@ -39,11 +42,14 @@ def clean_table_0():
     Cleans mainStopDateTime
     '''
     df_main = load_process_tables('0. mainStopDateTime.csv')
+    print('Table 0 loaded\n')
     df_main['stopDate'] = pd.to_datetime(df_main['stopDate']).dt.date
     df_main['stopTime'] = pd.to_datetime(df_main['stopTime']).dt.time
     cols_to_drop = ['highwayExit','isSchool', 'schoolName', 'isStudent']
     df_main.drop(cols_to_drop, axis=1, inplace=True)
     df_main.to_csv(out_file_path + 'PROCESSED_0_main.csv', index=False)
+    print('Table 0 processed\n')
+
 
 
 def clean_table_1():
@@ -51,9 +57,11 @@ def clean_table_1():
     Cleans perceivedRace table
     '''
     df_race = load_process_tables('1. perceivedRace.csv')
+    print('Table 1 loaded\n')
     df_race = pd.get_dummies(df_race).groupby(['StopID', 'PID']).sum()
     df_race.rename(columns= lambda x: re.sub('perceivedRace_', 'perceived_', x))
     df_race.to_csv(out_file_path + 'PROCESSED_1_race.csv')
+    print('Table 1 processed\n')
 
 
 def clean_table_2():
@@ -61,11 +69,13 @@ def clean_table_2():
     Cleans perceived disability table
     '''
     disability_df = load_process_tables('2. perceivedKnownDisability.csv')
+    print('Table 2 loaded\n')
     disability_df.rename(columns= lambda x: re.sub('perceivedOrKnown', '', x), inplace=True)
     disability_df = pd.get_dummies(disability_df)
     disability_df.drop('Disability_None', axis=1, inplace=True)
     disability_df.rename(columns=lambda x: re.sub('Disability_', 'DA_', x), inplace=True)
-    disability_df.to_csv(out_file_path + 'PROCESSED_1_disability.csv')
+    disability_df.to_csv(out_file_path + 'PROCESSED_2_disability.csv')
+    print('Table 2 loaded\n')
 
 
 def clean_table_3():
