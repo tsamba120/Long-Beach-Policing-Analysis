@@ -95,6 +95,8 @@ def clean_table_4():
     '''
     Cleans actions during stop
     '''
+    
+
 
 if __name__ == '__main__':
     clean_table_0()
