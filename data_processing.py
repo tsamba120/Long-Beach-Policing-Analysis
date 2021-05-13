@@ -114,8 +114,32 @@ def clean_table_4():
     ads_df2['propertySearchConsentGiven'] = ads_df2['propertySearchConsentGiven'].apply(int)
 
     final_ads_df = ads_df1.merge(ads_df2, on=['StopID', 'PID'])
-    final_ads_df.to_csv(out_file_path + 'PROCESSED_4_actionDurintStop.csv')
+    final_ads_df.to_csv(out_file_path + 'PROCESSED_4_actionDuringStop.csv')
     print('Table 4 processed\n')
+
+
+def clean_table_5():
+    ros_df = load_process_tables('5. resultOfStop.csv')
+    print('Table 5 loaded...')
+
+    # Shorten calling parents
+    ros_df['resultOfStop'] = ros_df['resultOfStop'].apply(lambda x: re.sub('Contacted parent/legal guardian or other person responsible for the minor', 'Contacted parent/guardian', x))
+
+    # Shorten Arrests
+    ros_df['resultOfStop'] = ros_df['resultOfStop'].apply(lambda x: re.sub('Custodial Arrest without warrant', 'Arrest (no warrant)', x))
+    ros_df['resultOfStop'] = ros_df['resultOfStop'].apply(lambda x: re.sub('Custodial Arrest pursuant to outstanding warrant', 'Arrest (with warrant)', x))
+
+    # School consolidation
+    ros_df['resultOfStop'] = ros_df['resultOfStop'].apply(lambda x: re.sub('Referral to school counselor or other support staff', 'School referral', x))
+    ros_df['resultOfStop'] = ros_df['resultOfStop'].apply(lambda x: re.sub('Referral to school administrator', 'School referral', x))
+    ros_df['resultOfStop'].unique()
+
+    ros_df.drop(['resultOfStopcode', 'resultOfStopcodeText'], axis=1, inplace=True)
+
+    ros_df = pd.get_dummies(ros_df)
+    ros_df.rename(columns= lambda x: re.sub('resultOfStop_', 'Result_', x), inplace=True)
+
+    ros_df.to_csv(out_file_path + 'PROCESSED_5_resultOfStop.csv\n')
 
 
 if __name__ == '__main__':
@@ -124,7 +148,8 @@ if __name__ == '__main__':
     clean_table_2()
     clean_table_3()
     print('='*30)
-    print('All tables processed')
+    print('Data prepreprocessing completed')
+    print('6 tables available in "processed_data" folder')
 
 ### CREATES MAIN DF BELOW ###
 
