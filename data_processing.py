@@ -109,7 +109,7 @@ def clean_table_4():
     ads_df2 = ads_df.drop(['ObjectId', 'actionTakenDuringStop'], axis=1).drop_duplicates()
     ads_df2['personSearchConsentGiven'] = ads_df2['personSearchConsentGiven'].apply(float)
     ads_df2['propertySearchConsentGiven'] = ads_df2['propertySearchConsentGiven'].apply(float)
-    ads_df2 = ads_df2.goupby(['StopID', 'PID']).sum().reset_index()
+    ads_df2 = ads_df2.groupby(['StopID', 'PID']).sum().reset_index()
     ads_df2['personSearchConsentGiven'] = ads_df2['personSearchConsentGiven'].apply(int)
     ads_df2['propertySearchConsentGiven'] = ads_df2['propertySearchConsentGiven'].apply(int)
 
@@ -140,16 +140,22 @@ def clean_table_5():
     ros_df.rename(columns= lambda x: re.sub('resultOfStop_', 'Result_', x), inplace=True)
 
     ros_df.to_csv(out_file_path + 'PROCESSED_5_resultOfStop.csv\n')
+    print('Table 5 processed\n')
 
 
-if __name__ == '__main__':
+def main():
     clean_table_0()
     clean_table_1()
     clean_table_2()
     clean_table_3()
+    clean_table_4()
+    clean_table_5()
     print('='*30)
     print('Data prepreprocessing completed')
     print('6 tables available in "processed_data" folder')
+
+if __name__ == '__main__':
+    main()
 
 ### CREATES MAIN DF BELOW ###
 
