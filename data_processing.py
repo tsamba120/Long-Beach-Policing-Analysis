@@ -51,7 +51,6 @@ def clean_table_0():
     print('Table 0 processed\n')
 
 
-
 def clean_table_1():
     '''
     Cleans perceivedRace table
@@ -139,7 +138,7 @@ def clean_table_5():
     ros_df = pd.get_dummies(ros_df)
     ros_df.rename(columns= lambda x: re.sub('resultOfStop_', 'Result_', x), inplace=True)
 
-    ros_df.to_csv(out_file_path + 'PROCESSED_5_resultOfStop.csv\n')
+    ros_df.to_csv(out_file_path + 'PROCESSED_5_resultOfStop.csv')
     print('Table 5 processed\n')
 
 
