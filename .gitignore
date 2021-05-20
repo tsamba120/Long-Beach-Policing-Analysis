@@ -2,3 +2,4 @@
 lbpd-acab.code-workspace
 **/__pycache__
 .vscode
+*.pyc

@@ -153,35 +153,44 @@ def main():
     print('Data prepreprocessing completed')
     print('6 tables available in "processed_data" folder')
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()
 
 ### CREATES MAIN DF BELOW ###
 
-# def create_main_df(file_names, file_path='./raw_data/'):
+def create_main_df(file_names, file_path='./raw_data/'):
 
-#     df = clean_columns(pd.read_csv(file_path + file_names[0], dtype=object)) # specified dtype as object so df's merge properly
-#     print('Main df has shape: ', len(df)) # 40523 unique police stops
+    df = pd.read_csv(file_path + file_names[0], dtype=object) # specified dtype as object so df's merge properly
+    df.rename(columns=lambda x: re.sub('properties.', '', x), inplace=True)
+    df.drop('ObjectId', axis=1, inplace=True)
 
-#     for file in file_names[1:6]:
-#         df2 = clean_columns(pd.read_csv(file_path + file, dtype=object))
-#         df = df.merge(df2, on=['StopID', 'PID'])
 
-#     print(df.head(2))
-#     print(df.info())
-#     return df
+    print('Main df has shape: ', len(df)) # 40523 unique police stops
+
+    for file in file_names[1:6]:
+        df2 = pd.read_csv(file_path + file, dtype=object)
+        df2.rename(columns=lambda x: re.sub('properties.', '', x), inplace=True)
+        df2.drop('ObjectId', axis=1, inplace=True)
+
+
+        df = df.merge(df2, on=['StopID', 'PID'])
+
+    print(df.head(2))
+    print(df.info())
+    return df
 
 # def remove_objectId(df):
 #     cols = list(df.filter(regex='ObjectId').columns)
 #     df.drop(cols, axis=1, inplace=True)
 
-# def df_to_csv(df, file_path='./processed_data/'):
-#     df.to_csv(file_path + 'PROCESSED_0_to_5.csv', index=False)
+def df_to_csv(df, file_path='./processed_data/'):
+    df.to_csv(file_path + 'PROCESSED_0_to_5.csv', index=False)
 
 
-# if __name__ == '__main__':
-#     file_names = file_name_existence(url_dict)
-#     df = create_main_df(file_names)
-#     remove_objectId(df)
-#     df_to_csv((df))
+if __name__ == '__main__':
+    file_names = file_name_existence(url_dict)
+    df = create_main_df(file_names)
+    # remove_objectId(df)
+    df_to_csv((df))
     
+    main()
