@@ -1,6 +1,7 @@
-'''
-For processing tables and merging dataframes
-'''
+#####
+# For processing tables and merging dataframes
+##### 
+
 from os import path
 import pandas as pd
 import re
@@ -142,22 +143,6 @@ def clean_table_5():
     print('Table 5 processed\n')
 
 
-def main():
-    clean_table_0()
-    clean_table_1()
-    clean_table_2()
-    clean_table_3()
-    clean_table_4()
-    clean_table_5()
-    print('='*30)
-    print('Data prepreprocessing completed')
-    print('6 tables available in "processed_data" folder')
-
-# if __name__ == '__main__':
-#     main()
-
-### CREATES MAIN DF BELOW ###
-
 def create_main_df(file_names, file_path='./raw_data/'):
 
     df = pd.read_csv(file_path + file_names[0], dtype=object) # specified dtype as object so df's merge properly
@@ -177,20 +162,31 @@ def create_main_df(file_names, file_path='./raw_data/'):
 
     print(df.head(2))
     print(df.info())
-    return df
 
-# def remove_objectId(df):
-#     cols = list(df.filter(regex='ObjectId').columns)
-#     df.drop(cols, axis=1, inplace=True)
-
-def df_to_csv(df, file_path='./processed_data/'):
-    df.to_csv(file_path + 'PROCESSED_0_to_5.csv', index=False)
-
-
-if __name__ == '__main__':
-    file_names = file_name_existence(url_dict)
-    df = create_main_df(file_names)
-    # remove_objectId(df)
-    df_to_csv((df))
     
+    df.to_csv('./processed_data/' + 'PROCESSED_0_to_5.csv', index=False)
+    print('Primary table processed and saved')
+    
+
+# Add below function into processing function
+# Add print statements
+
+def main():
+    clean_table_0()
+    clean_table_1()
+    clean_table_2()
+    clean_table_3()
+    clean_table_4()
+    clean_table_5()
+
+    file_names = file_name_existence(url_dict)
+    create_main_df(file_names)
+
+    print('='*30)
+    print('Data prepreprocessing completed')
+    print('6 tables available in "processed_data" folder')
+
+
+# implement main table function in main() function
+if __name__ == '__main__':
     main()
